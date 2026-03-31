@@ -92,4 +92,16 @@ The Singleton pattern and DashMap serve two different purposes. The lazy\_static
 
 #### Reflection Publisher-2
 
+**1\. In the Model-View Controller (MVC) compound pattern, there is no “Service” and “Repository”. Model in MVC covers both data storage and business logic. Explain based on your understanding of design principles, why we need to separate “Service” and “Repository” from a Model?**
+
+Separating the Service and Repository from the Model adheres to the Single Responsibility Principle (SRP) and Separation of Concerns. If a Model handles data formatting, business logic, and database interactions, it becomes a "God Object" or too large, hard to test, and difficult to maintain. By separating them, the **Model** only defines the data structure, the **Repository** strictly manages data storage and retrieval (for example: interacting with the DashMap), and the **Service** acts as the orchestrator for the business logic. This modularity makes unit testing much easier since we can mock the repository when testing the service.
+
+**2\. What happens if we only use the Model? Explain your imagination on how the interactions between each model (Program, Subscriber, Notification) affect the code complexity for each model?**
+
+If we only used the Model, the code complexity would increase exponentially due to tight coupling. For example, the Product model wouldn't just hold product details, it would need to contain the logic for creating HTTP requests, finding Subscribers, and generating Notifications. A change in how a Notification is sent would require modifying the Product model. This violates the Open-Closed Principle. Modifying one feature would risk breaking unrelated features, and testing the Product creation would unnecessarily trigger actual network calls.
+
+**3\. Have you explored more about Postman? Tell us how this tool helps you to test your current work. You might want to also list which features in Postman you are interested in or feel like it is helpful to help your Group Project or any of your future software engineering projects.**
+
+Postman simplifies API testing by allowing developers to hit endpoints, simulate payloads, and view JSON responses without needing a fully constructed frontend interface. Features like Collections and Environment Variables allow for seamless switching between local and production environments. Utilizing Postman's built-in testing scripts and automated runners will be particularly valuable when verifying the reliability of Wallet Management APIs for the BidMart project. It ensures that complex endpoints like balance updates, transaction histories, and concurrent payment states are thoroughly validated before being integrated with the frontend application.
+
 #### Reflection Publisher-3

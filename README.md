@@ -105,3 +105,20 @@ If we only used the Model, the code complexity would increase exponentially due 
 Postman simplifies API testing by allowing developers to hit endpoints, simulate payloads, and view JSON responses without needing a fully constructed frontend interface. Features like Collections and Environment Variables allow for seamless switching between local and production environments. Utilizing Postman's built-in testing scripts and automated runners will be particularly valuable when verifying the reliability of Wallet Management APIs for the BidMart project. It ensures that complex endpoints like balance updates, transaction histories, and concurrent payment states are thoroughly validated before being integrated with the frontend application.
 
 #### Reflection Publisher-3
+
+**1\. Observer Pattern has two variations: Push model (publisher pushes data to subscribers) and Pull model (subscribers pull data from publisher). In this tutorial case, which variation of Observer Pattern that we use?**
+
+In this tutorial, we are using the **Push model**. The Main App (Publisher) actively creates the HTTP POST request and "pushes" the payload (the notification data) directly to the URL of the Receiver App (Subscriber) the moment a product is created, deleted, or promoted.
+
+**2\. What are the advantages and disadvantages of using the other variation of Observer Pattern for this tutorial case? (example: if you answer Q1 with Push, then imagine if we used Pull)**
+
+If we used the **Pull model**, the Subscribers would have to continuously poll or request updates from the Publisher.
+
+*   **Advantages of Pull:** The Subscriber controls when it receives data, meaning it won't get overwhelmed if the Publisher sends too many notifications at once. It also means the Publisher doesn't need to keep track of a complex list of subscriber URLs.
+    
+*   **Disadvantages of Pull:** It is highly inefficient for real-time notifications. The Subscriber would waste network resources making requests when no new products have been created (polling overhead), and there would be a delay between when a product is created and when the subscriber finally pulls that data.
+    
+
+**3\. Explain what will happen to the program if we decide to not use multi-threading in the notification process.**
+
+If we did not use multi-threading (std::thread::spawn), the Main App would process HTTP POST requests sequentially. If we had 100 subscribers, the server would have to wait for Subscriber 1 to respond before sending to Subscriber 2. If a subscriber's URL was offline or slow to respond, the entire Main App would block and hang. This would cause massive latency, and the create, delete, or publish operations would take an unacceptably long time to finish, effectively freezing the API for other users.
